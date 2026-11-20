@@ -1,0 +1,10 @@
+# Supply-chain protection: only install package versions published at least 3 days ago
+# (value in minutes). Do not bypass, except for security fixes (see CLAUDE.md).
+minimumReleaseAge: 4320
+
+# Save exact versions instead of ^ranges.
+savePrefix: ''
+
+allowBuilds:
+  sharp: false
+  unrs-resolver: false

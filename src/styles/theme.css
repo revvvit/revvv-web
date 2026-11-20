@@ -1,0 +1,88 @@
+/*
+ * revvv.it theme tokens — the single source of truth for colors.
+ * Changing the palette should only touch this file.
+ *
+ * Brand palette (source values):
+ *   light: bg #FBF7F1, text #2A1C12, accent #E39B2D, accent-strong #9A5A0E
+ *   dark:  bg #1C1410, text #F5ECE2, accent #F0A93B, accent-strong #F6BD62
+ *
+ * Mapping to shadcn/ui tokens:
+ *   brand accent        -> --primary (CTA backgrounds) and --brand
+ *   brand accent-strong -> --brand-strong (accent-colored TEXT: links, highlights)
+ *   shadcn --accent is NOT the brand accent — it is a subtle hover surface.
+ *
+ * Contrast notes (WCAG):
+ *   - Light accent #E39B2D on the light bg is only 2.2:1 — never use it as text
+ *     or as the only indicator of a UI state. Use --brand-strong (5.1:1) instead.
+ *   - Text on --primary uses the dark text color (7.1:1 light, 9.0:1 dark).
+ *
+ * Derived values (surfaces, muted, borders, destructive) are working
+ * assumptions mixed from bg/text, not part of the brand palette yet.
+ */
+
+:root {
+  color-scheme: light;
+
+  --background: #fbf7f1;
+  --foreground: #2a1c12;
+
+  --brand: #e39b2d;
+  --brand-strong: #9a5a0e;
+
+  --card: #ffffff;
+  --card-foreground: var(--foreground);
+  --popover: #ffffff;
+  --popover-foreground: var(--foreground);
+
+  --primary: var(--brand);
+  --primary-foreground: #2a1c12;
+
+  --secondary: #eeeae4;
+  --secondary-foreground: var(--foreground);
+  --muted: #eeeae4;
+  --muted-foreground: #6d6259;
+  --accent: #eeeae4;
+  --accent-foreground: var(--foreground);
+
+  --destructive: #b42318;
+
+  /* Decorative separators (cards, dividers). */
+  --border: #ded8d2;
+  /* Form control outlines — 3:1 against the background (WCAG 1.4.11). */
+  --input: #938a82;
+  /* Focus ring uses the strong accent: the plain accent is too light here. */
+  --ring: var(--brand-strong);
+
+  --radius: 0.625rem;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --background: #1c1410;
+  --foreground: #f5ece2;
+
+  --brand: #f0a93b;
+  --brand-strong: #f6bd62;
+
+  --card: #271f1b;
+  --card-foreground: var(--foreground);
+  --popover: #271f1b;
+  --popover-foreground: var(--foreground);
+
+  --primary: var(--brand);
+  --primary-foreground: #1c1410;
+
+  --secondary: #322a25;
+  --secondary-foreground: var(--foreground);
+  --muted: #322a25;
+  --muted-foreground: #b0a79f;
+  --accent: #322a25;
+  --accent-foreground: var(--foreground);
+
+  --destructive: #f97066;
+
+  --border: #3f3732;
+  --input: #736a64;
+  --ring: var(--brand);
+}

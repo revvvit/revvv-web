@@ -28,6 +28,8 @@ React Hook Form + Zod, Orval (klient z OpenAPI), next-intl, Sonner, MapLibre, St
 Vitest + Testing Library + MSW, Playwright, pnpm.
 
 ## Konwencje
+- **Konwencje kodu** (struktura, nazewnictwo, komponenty, dane, formularze, testy, Prettier):
+  `docs/conventions.md`. Zwracaj uwagę, gdy kod — także pisany przez właściciela — od nich odbiega.
 - **Kod, commity, PR-y, komentarze:** po angielsku. **Tickety w Jirze:** po polsku.
 - **Gałęzie:** `REV-<numer>-krotki-opis`. **Commity:** Conventional Commits z numerem ticketu,
   np. `feat(search): add power filter [REV-42]`.
@@ -63,7 +65,9 @@ Vitest + Testing Library + MSW, Playwright, pnpm.
 - Jira: przestrzeń `revvv.it`, klucz `REV`, połączona z GitHubem (GitHub for Atlassian, organizacja `revvvit`).
 - Gdy dostajesz numer ticketu (np. `REV-42`), pobierz go przez Atlassian MCP, przeczytaj kryteria
   akceptacji, zaproponuj plan i dopytaj o niejasności przed kodowaniem.
-- Do tworzenia ticketów używaj skilla `jira-ticket`.
+- Proces pracy nad ticketem i review: `../revvv-api/docs/jak-pracujemy.md` (sekcje 3–4). Na starcie
+  każdego ticketu krótko przypomnij etapy i mów, na którym jesteśmy. Commit tylko na polecenie właściciela.
+- Do tworzenia ticketów używaj skilla `jira-ticket`, do review PR-ów skilla `pr-review`.
 - Statusy: To Do → In Progress → Code Review → QA → Ready for Release → Done (szczegóły: project-brief, sekcja 8).
   Proponuj przejścia: start pracy → In Progress, otwarty PR → Code Review, merge → QA (testy na INT),
   przetestowane na INT → Ready for Release, wdrożone na PRD → Done.
@@ -78,8 +82,24 @@ Vitest + Testing Library + MSW, Playwright, pnpm.
 - [ ] Sprawdzona dostępność (klawiatura, kontrast)
 
 ## Polecenia
-<!-- Uzupełnić po wygenerowaniu szkieletu. Np.: -->
-<!-- pnpm dev | pnpm test | pnpm lint | pnpm storybook | pnpm api:generate | pnpm e2e -->
+- `pnpm dev` — serwer deweloperski (Turbopack)
+- `pnpm build` / `pnpm start` — build produkcyjny i jego uruchomienie
+- `pnpm lint` — ESLint
+- `pnpm typecheck` — generuje typy tras (`next typegen`) i uruchamia `tsc --noEmit`
+<!-- Do dodania w kolejnych ticketach: pnpm test | pnpm storybook | pnpm api:generate | pnpm e2e -->
+
+## Next.js 16
+Wersja Next.js jest nowsza niż wiedza modeli. Przed pisaniem kodu specyficznego dla Next.js
+sprawdzaj dokumentację w `node_modules/next/dist/docs/` (szczegóły: @AGENTS.md).
+Włączone są Cache Components (`cacheComponents: true`) — odczyt `cookies()`/`headers()`
+w layoucie wyłącza statyczne renderowanie całej aplikacji.
+
+## Motyw
+- Wszystkie kolory w `src/styles/theme.css` (tokeny dla `:root` i `.dark`). Zmiana palety = zmiana tego pliku.
+- Akcent marki → `bg-primary` / `bg-brand`; tekst w kolorze akcentu → `text-brand-strong`
+  (zwykły akcent w trybie jasnym ma za mały kontrast jako tekst).
+- Tryb ciemny: skrypt inline w `<head>` (`src/lib/theme.ts`) + hook `useTheme` (`src/hooks/use-theme.ts`).
+  Bez `next-themes` — zgodnie z przewodnikiem Next.js „Preventing flash before hydration”.
 
 ## Dokumentacja
 - `../revvv-api/docs/project-brief.md` — kontekst i decyzje całego projektu
