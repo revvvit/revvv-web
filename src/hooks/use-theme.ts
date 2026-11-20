@@ -2,10 +2,13 @@
 
 import { useCallback, useLayoutEffect, useSyncExternalStore } from "react";
 
-import { THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
+import { DARK_QUERY, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
 
-const DARK_QUERY = "(prefers-color-scheme: dark)";
 const THEME_CHANGE_EVENT = "revvv:themechange";
+
+// Holds the choice when localStorage can't save it (blocked site data, full quota),
+// so the switch still works until the page is reloaded.
+let unsavedTheme: Theme | null = null;
 
 function readStoredTheme(): Theme | null {
   try {
@@ -18,7 +21,7 @@ function readStoredTheme(): Theme | null {
 
 /** Stored choice wins; without one we follow the OS (same rule as `themeInitScript`). */
 function resolveTheme(): Theme {
-  return readStoredTheme() ?? (matchMedia(DARK_QUERY).matches ? "dark" : "light");
+  return unsavedTheme ?? readStoredTheme() ?? (matchMedia(DARK_QUERY).matches ? "dark" : "light");
 }
 
 function applyTheme(theme: Theme) {
@@ -58,8 +61,9 @@ export function useTheme() {
   const setTheme = useCallback((next: Theme) => {
     try {
       localStorage.setItem(THEME_STORAGE_KEY, next);
+      unsavedTheme = null;
     } catch {
-      // Storage unavailable (e.g. privacy mode): the choice just won't persist.
+      unsavedTheme = next;
     }
     applyTheme(next);
     window.dispatchEvent(new Event(THEME_CHANGE_EVENT));

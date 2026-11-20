@@ -54,14 +54,20 @@ messages/               tłumaczenia next-intl (REV-18)
 - **Złożone komponenty jako osobne eksporty** (`DialogContent`, `DialogFooter` — styl shadcn), nie
   `Modal.Content`. Notacja z kropką nie działa przez granicę serwer/klient w App Routerze.
 - Komponent > ~150 linii → wydzielamy części. Jeden główny komponent na plik; małe pomocnicze mogą zostać obok.
-- **`components/ui/`** (shadcn) traktujemy jak bibliotekę: nie przerabiamy stylu, żeby móc pobierać
-  aktualizacje. Własne warianty i kompozycje budujemy w swoich komponentach.
+- **`components/ui/`** (shadcn): zmieniamy oszczędnie. Poprawki, które dotyczą każdego użycia
+  (dostępność, dopasowanie do palety), robimy w komponencie bazowym z komentarzem `// revvv: …`, żeby
+  przy aktualizacji z shadcn (`--overwrite`) było widać, co przenieść. Warianty i kompozycje
+  potrzebne w jednym miejscu budujemy we własnych komponentach.
 
 ## 4. Style
 
 - Tailwind + tokeny motywu (`bg-primary`, `text-muted-foreground`, `text-brand-strong`).
   **Żadnych kolorów na sztywno**, żadnych SCSS. Inline `style` tylko dla wartości dynamicznych.
-- Łączenie klas: `cn()` z `@/lib/utils` (clsx + tailwind-merge — późniejsza klasa wygrywa konflikt).
+- **`primary` nie jest kolorem tekstu.** Jasny akcent ma kontrast 2,2:1. Tekst i cienkie elementy w kolorze
+  marki: `text-brand-strong`. Komponenty shadcn, które używają `primary` jako tekstu (np. Button `variant="link"`),
+  nadpisujemy klasą (paleta do poprawy w REV-39).
+- Łączenie klas: `cn()` z paczki `cn` od shadcn (zamiennik clsx + tailwind-merge — późniejsza klasa wygrywa
+  konflikt). Własny kod importuje go z `@/lib/utils`, komponenty shadcn bezpośrednio z `cn`.
 - Warianty: `cva`. We własnych komponentach klasy grupujemy w tablice według celu:
   ```ts
   const cardVariants = cva(
